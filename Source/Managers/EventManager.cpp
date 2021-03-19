@@ -6,21 +6,15 @@
 #include "Managers/DeltaManager.h"
 #include "Managers/StateManager.h"
 
-RenderWindow*	EventManager::window;
-
-//sf::String		windowTitle;
-//float			uiUniversalScale;
-//float			uiBorderScale;
-//float			uiTextScale;
-//sf::Color		uiColor;
+RenderWindow*	EventManager::pGlobalWindow;
 
 void EventManager::Update()
 {
-	if (window != nullptr)
+	if (pGlobalWindow != nullptr)
 	{
 		sf::Event event;
 
-		while (window->pollEvent(event))
+		while (pGlobalWindow->pollEvent(event))
 		{
 			ImGui::SFML::ProcessEvent(event);
 
@@ -28,7 +22,7 @@ void EventManager::Update()
 			{
 				case sf::Event::Closed:
 				{
-					window->close();
+					pGlobalWindow->close();
 				}
 				break;
 
@@ -36,16 +30,18 @@ void EventManager::Update()
 				{
 					if (Keyboard::isKeyPressed(Keyboard::LAlt) && Keyboard::isKeyPressed(Keyboard::M))
 					{
-						window->setPosition(sf::Vector2i(Mouse::getPosition().x - window->getSize().x / 2, Mouse::getPosition().y - window->getSize().y / 2));
+						pGlobalWindow->setPosition(sf::Vector2i(
+							Mouse::getPosition().x - pGlobalWindow->getSize().x / 2, 
+							Mouse::getPosition().y - pGlobalWindow->getSize().y / 2));
 					}
 
 					switch (event.key.code)
 					{
 						case Keyboard::Escape:
 						{
-							if (StateManager::GenericSceneState == GENERIC_SCENE_STATE::ACTIVE)
+							if (StateManager::GetGenericSceneState() == GENERIC_SCENE_STATE::ACTIVE)
 							{
-								window->close();
+								pGlobalWindow->close();
 							}
 						}
 						break;
@@ -63,12 +59,12 @@ void EventManager::Update()
 
 void EventManager::AttachGlobalWindow(RenderWindow& renderWindow)
 {
-	window = &renderWindow;
-	ImGui::SFML::Init(*window);
+	pGlobalWindow = &renderWindow;
+	ImGui::SFML::Init(*pGlobalWindow);
 }
 
 void EventManager::DetachGlobalWindow()
 {
 	ImGui::SFML::Shutdown();
-	window = nullptr;
+	pGlobalWindow = nullptr;
 }

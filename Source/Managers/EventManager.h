@@ -19,7 +19,7 @@ public:
 
 public:
 
-	static RenderWindow* window;
+	static RenderWindow* pGlobalWindow;
 
 };
 

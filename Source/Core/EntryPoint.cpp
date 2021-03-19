@@ -34,7 +34,7 @@ int main()
 	// creates Editor (or whatever) scene and store it with SceneManager (position 1)
 	SceneManager::PushBackScene(new Editor(), "Editor");
 
-	// Engine initialized window video mode, title, style, and context setttings
+	// Engine initialized window video mode, title, style, context settings, and framerate limit
 	Engine::Initialize(sf::VideoMode(1280, 720), sf::String("Untitled Engine"), sf::Style::None, sf::ContextSettings(0, 0, 4), 60);
 	
 	// setup with or without flags (will be defined soon)
@@ -52,11 +52,11 @@ int main()
 		// if theres aren't any scenes queued
 		if (Engine::GetQueuedScene() == nullptr)
 		{
-			// attach a default scene (e.g. a loading screen)
+			// attach the designated default scene (a loading screen in this case)
 			Engine::AttachQueuedScene(*SceneManager::GetScene("Loading"));
 		}
 
-		// run/execute scene
+		// run/execute active scene
 		Engine::ExcuteActiveScene();
 	}
 	

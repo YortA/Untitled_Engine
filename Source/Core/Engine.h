@@ -4,10 +4,10 @@
 
 enum class SETUP_FLAG : uint8_t
 {
-	TO_DO_1	= 0b000, 
-	TO_DO_2	= 0b001, 
-	TO_DO_3	= 0b010, 
-	TO_DO_4	= 0b100 
+	TO_DO_0	= 0b000, 
+	TO_DO_1	= 0b001, 
+	TO_DO_2	= 0b010, 
+	TO_DO_3	= 0b100 
 };
 
 class Engine

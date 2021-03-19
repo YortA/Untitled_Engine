@@ -51,4 +51,3 @@ private:
 	sf::Color		darkGrey		= sf::Color();
 
 };
-

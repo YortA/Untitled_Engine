@@ -33,7 +33,7 @@ public:
 	static void SetGenericSceneState(GENERIC_SCENE_STATE state);
 	static GENERIC_SCENE_STATE& GetGenericSceneState();
 
-public:
+private:
 
 	static ENGINE_STATE			EngineState;
 	static GENERIC_SCENE_STATE	GenericSceneState;

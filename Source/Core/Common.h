@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <vector>
+#include <imgui.h>
+#include <imgui-SFML.h>
 #include "Core/RenderWindow.h"
 #include "Core/Mouse.h"
 #include "Core/Keyboard.h"
@@ -13,6 +15,7 @@
 #include "Core/Text.h"
 #include "Core/CircleShape.h"
 #include "Core/RectangleShape.h"
+#include "Core/Sprite.h"
 #include "Core/AspectRatioCalculator.h"
 #include "Core/ScaleCalculator.h"
 #include "Core/RandomNumberGenerator.h"

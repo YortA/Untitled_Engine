@@ -148,9 +148,14 @@ void Engine::DetachActiveScene()
 
 void Engine::Exit()
 {
+	// detach active scene
+	DetachActiveScene();
+
+	// detach queued scene
+	DetachQueuedScene();
+
 	// manager clean up
 	EventManager::DetachGlobalWindow();
-	SceneManager::Clear();
 
 	// state flags soon
 	delete GlobalWindow;
@@ -163,7 +168,7 @@ Scene* Engine::GetActiveScene()
 
 Scene* Engine::GetQueuedScene()
 {
-	return ActiveScene;
+	return QueuedScene;
 }
 
 bool Engine::IsRunning()

@@ -9,20 +9,20 @@
 void SceneLoading::create()
 {
 	// make all fonts
-	fonts.push_back(Font()); // 0 - main font
+	pushFont("main_font"); // 0
 
 	// make all texts
-	texts.push_back(Text()); // 0 - loading bar message top
-	texts.push_back(Text()); // 1 - loading bar message bottom
+	pushText("loading_bar_message_top");	// 0
+	pushText("loading_bar_message_bottom");	// 1
 
 	// make all rectangles
-	rectangles.push_back(RectangleShape()); // 0 - background
-	rectangles.push_back(RectangleShape()); // 1 - loading dot 1
-	rectangles.push_back(RectangleShape()); // 2 - loading dot 2
-	rectangles.push_back(RectangleShape()); // 3 - loading dot 3
-	rectangles.push_back(RectangleShape()); // 4 - loading bar 1
-	rectangles.push_back(RectangleShape()); // 5 - loading bar 2
-	rectangles.push_back(RectangleShape()); // 6 - splash screen
+	pushRectangle("background");	// 0
+	pushRectangle("loading_dot_1"); // 1
+	pushRectangle("loading_dot_2"); // 2
+	pushRectangle("loading_dot_3"); // 3
+	pushRectangle("loading_bar_1"); // 4
+	pushRectangle("loading_bar_2"); // 5
+	pushRectangle("splash_screen"); // 6
 
 	// switch to setup
 	StateManager::SetGenericSceneState(GENERIC_SCENE_STATE::SETUP);
@@ -46,9 +46,9 @@ void SceneLoading::setup()
 void SceneLoading::update()
 {
 	// specified update functions
-	updateLoadingDots(rectangles[1], rectangles[2], rectangles[3]);
-	updateLoadingBars(rectangles[4], rectangles[5]);
-	updateSplashScreen(rectangles[6]);
+	updateLoadingDots(getRectangle(1), getRectangle(2), getRectangle(3));
+	updateLoadingBars(getRectangle(4), getRectangle(5));
+	updateSplashScreen(getRectangle(6));
 
 	// test load end (cut this and replace with actual loading and or continue prompt)
 	if (Keyboard::isKeyPressed(Keyboard::Enter))
@@ -62,24 +62,24 @@ void SceneLoading::render()
 	// clear frame
 	getGlobalWindow().clear();
 	
-	// draw frame
+	// draw frame layer by layer
 	for (auto renderLayer = 1; renderLayer <= getRenderLayerCount(); renderLayer++)
 	{
 		// draw all rectangles on this layer
-		for (auto i = 0; i < rectangles.size(); i++)
+		for (auto i = 0; i < getRectangleCount(); i++)
 		{
-			if (rectangles[i].isRenderEnabled() && rectangles[i].getRenderLayer() == renderLayer)
+			if (getRectangle(i).isRenderEnabled() && getRectangle(i).getRenderLayer() == renderLayer)
 			{
-				getGlobalWindow().draw(rectangles[i]);
+				getGlobalWindow().draw(getRectangle(i));
 			}
 		}
 
 		// draw all texts on this layer
-		for (auto i = 0; i < texts.size(); i++)
+		for (auto i = 0; i < getTextCount(); i++)
 		{
-			if (texts[i].isRenderEnabled() && texts[i].getRenderLayer() == renderLayer)
+			if (getText(i).isRenderEnabled() && getText(i).getRenderLayer() == renderLayer)
 			{
-				getGlobalWindow().draw(texts[i]);
+				getGlobalWindow().draw(getText(i));
 			}
 		}
 	}
@@ -90,9 +90,7 @@ void SceneLoading::render()
 
 void SceneLoading::destroy()
 {
-	fonts.clear();
-	texts.clear();
-	rectangles.clear();
+	clearAllResources();
 
 	StateManager::SetGenericSceneState(GENERIC_SCENE_STATE::INACTIVE);
 }
@@ -121,33 +119,33 @@ void SceneLoading::setupMain()
 
 void SceneLoading::setupFonts()
 {
-	fonts[0].loadFromFile("resource/fonts/chess_type.ttf");
+	getFont(0).loadFromFile("resource/fonts/chess_type.ttf");
 }
 
 void SceneLoading::setupTexts()
 {
 	const auto resolution = sf::Vector2f(getGlobalWindow().getSize());
 
-	texts[0].setFont(fonts[0]);
-	texts[1].setFont(fonts[0]);
+	getText(0).setFont(getFont(0));
+	getText(1).setFont(getFont(0));
 	
-	texts[0].setCharacterSize(50);
-	texts[1].setCharacterSize(50);
+	getText(0).setCharacterSize(50);
+	getText(1).setCharacterSize(50);
 	
-	texts[0].setString("loading");
-	texts[1].setString("loading");
+	getText(0).setString("loading");
+	getText(1).setString("loading");
 	
-	texts[0].setFillColor(darkOrange);
-	texts[1].setFillColor(darkOrange);
+	getText(0).setFillColor(darkOrange);
+	getText(1).setFillColor(darkOrange);
 	
-	texts[0].setPosition(sf::Vector2f( (resolution.x / 2) - 107.f, (resolution.y / 2) - 112.f ) );
-	texts[1].setPosition(sf::Vector2f( (resolution.x / 2) - 107.f, (resolution.y / 2) + 38.f ) );
+	getText(0).setPosition(sf::Vector2f( (resolution.x / 2) - 107.f, (resolution.y / 2) - 112.f ) );
+	getText(1).setPosition(sf::Vector2f( (resolution.x / 2) - 107.f, (resolution.y / 2) + 38.f ) );
 	
-	texts[0].setRenderEnabled(true);
-	texts[1].setRenderEnabled(true);
+	getText(0).setRenderEnabled(true);
+	getText(1).setRenderEnabled(true);
 	
-	texts[0].setRenderLayer(3);
-	texts[1].setRenderLayer(3);
+	getText(0).setRenderLayer(3);
+	getText(1).setRenderLayer(3);
 }
 
 void SceneLoading::setupRectangles()
@@ -157,7 +155,7 @@ void SceneLoading::setupRectangles()
 	const auto dotSpeed = sf::Vector2f(.15f, 0.f);
 	const auto barSpeed = sf::Vector2f(.25f, 0.f);
 
-	rectangles[0].setup(							// (background)
+	getRectangle(0).setup(							// (background)
 		sf::Vector2f(getGlobalWindow().getSize()),	// size 
 		sf::Vector2f(0.f, 0.f), 					// origin
 		sf::Vector2f(getGlobalScale()),				// scale
@@ -170,7 +168,7 @@ void SceneLoading::setupRectangles()
 
 	for (auto i = 1; i < 4; i++)
 	{
-		rectangles[i].setup(													// (loading dots)
+		getRectangle(i).setup(													// (loading dots)
 			sf::Vector2f(dotSize), 												// size 
 			sf::Vector2f(dotSize.x / 2, dotSize.y / 2),							// origin
 			sf::Vector2f(getGlobalScale()),										// scale
@@ -180,10 +178,10 @@ void SceneLoading::setupRectangles()
 			true,																// render enabled
 			2,																	// render layer
 			nullptr);															// texture
-		rectangles[i].setSpeed(animationSpeed, 0.f);							// speed
+		getRectangle(i).setSpeed(animationSpeed, 0.f);							// speed
 	}
 
-	rectangles[4].setup(												// (loading bar 1)
+	getRectangle(4).setup(												// (loading bar 1)
 		sf::Vector2f(barSize), 											// size 
 		sf::Vector2f(0.f, barSize.y / 2),								// origin
 		sf::Vector2f(getGlobalScale()),									// scale
@@ -193,9 +191,9 @@ void SceneLoading::setupRectangles()
 		true,															// render enabled
 		2,																// render layer
 		nullptr);														// texture
-	rectangles[4].setSpeed(barSpeed);									// speed
+	getRectangle(4).setSpeed(barSpeed);									// speed
 
-	rectangles[5].setup(																				// (loading bar 2)
+	getRectangle(5).setup(																				// (loading bar 2)
 		sf::Vector2f(barSize), 																			// size 
 		sf::Vector2f(0.f, barSize.y / 2),																// origin
 		sf::Vector2f(getGlobalScale()),																	// scale
@@ -205,9 +203,9 @@ void SceneLoading::setupRectangles()
 		true,																							// render enabled
 		2,																								// render layer
 		nullptr);																						// texture
-	rectangles[5].setSpeed(barSpeed);																	// speed
+	getRectangle(5).setSpeed(barSpeed);																	// speed
 
-	rectangles[6].setup(							// (splash screen)
+	getRectangle(6).setup(							// (splash screen)
 		sf::Vector2f(getGlobalWindow().getSize()),	// size  
 		sf::Vector2f(0.f, 0.f), 					// origin
 		sf::Vector2f(getGlobalScale()),				// scale
@@ -291,20 +289,21 @@ void SceneLoading::updateLoadingBars(RectangleShape& bar1, RectangleShape& bar2)
 	{
 		if (bar1.getSize().x > 0)
 		{
-			bar1.grow(
-				sf::Vector2f(
+			bar1.grow(sf::Vector2f(
 					-(bar1.getSpeed().x * DeltaManager::Restart.asMilliseconds()), 
 					-(bar1.getSpeed().y * DeltaManager::Restart.asMilliseconds())));
+
 			bar1.setSpeed(bar1.getSpeed().x + .05f, bar1.getSpeed().y);
 		}
 
 		if (bar2.getSize().x > 0)
 		{
-			bar2.grow(
-				sf::Vector2f(
+			bar2.grow(sf::Vector2f(
 					-(bar2.getSpeed().x * DeltaManager::Restart.asMilliseconds()),
 					-(bar2.getSpeed().y * DeltaManager::Restart.asMilliseconds())));
+
 			bar2.setSpeed(bar2.getSpeed().x + .05f, bar2.getSpeed().y);
+
 			bar2.setPosition(resolution.x - bar2.getSize().x, bar2.getPosition().y);
 		}
 	}
@@ -331,7 +330,7 @@ void SceneLoading::updateSplashScreen(RectangleShape& splashScreen)
 
 				if (splashScreen.isOpaque())
 				{
-					StateManager::GenericSceneState = GENERIC_SCENE_STATE::DESTROY;
+					StateManager::GetGenericSceneState() = GENERIC_SCENE_STATE::DESTROY;
 				}
 			}
 		}
